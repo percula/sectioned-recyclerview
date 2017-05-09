@@ -70,6 +70,10 @@ public abstract class SectionedRecyclerViewAdapter<VH extends SectionedViewHolde
         }
         int startPosition = sectionRange[0];
         int sectionItemCount = sectionRange[1];
+        if (sectionItemCount == 0) {
+            Log.d(TAG, "There are no items in section " + section + " to notify.");
+            return;
+        }
         notifyItemRangeInserted(startPosition, sectionItemCount);
     }
 
@@ -85,6 +89,10 @@ public abstract class SectionedRecyclerViewAdapter<VH extends SectionedViewHolde
         }
         int startPosition = sectionRange[0];
         int sectionItemCount = sectionRange[1];
+        if (sectionItemCount == 0) {
+            Log.d(TAG, "There are no items in section " + section + " to notify.");
+            return;
+        }
         notifyItemRangeRemoved(startPosition, sectionItemCount);
     }
 
@@ -106,10 +114,6 @@ public abstract class SectionedRecyclerViewAdapter<VH extends SectionedViewHolde
             throw new IllegalStateException("No header position mapped for section " + section);
         }
         int sectionItemCount = getItemCount(section);
-        if (sectionItemCount == 0) {
-            Log.d(TAG, "There are no items in section " + section + " to notify.");
-            return null;
-        }
         int startPosition = sectionHeaderIndex + 1;
         Log.d(TAG, "Invalidating " + sectionItemCount + " items starting at index " + startPosition);
         return new int[]{startPosition, sectionItemCount};
