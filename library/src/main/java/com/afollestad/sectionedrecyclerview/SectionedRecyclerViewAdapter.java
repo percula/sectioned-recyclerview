@@ -30,7 +30,7 @@ public abstract class SectionedRecyclerViewAdapter<VH extends SectionedViewHolde
     }
 
     /**
-     * Notifes the adapter when a section is removed (swiped or dismissed)
+     * Notifies the adapter when a section is removed (swiped or dismissed)
      *
      * @param section Section to remove
      */
@@ -41,11 +41,22 @@ public abstract class SectionedRecyclerViewAdapter<VH extends SectionedViewHolde
         }
         int startPosition = sectionRange[0];
         int sectionItemCount = sectionRange[1];
+
+        // Adjust expand/collapse mapping
+        for (int i = section; i < getSectionCount(); i++) {
+            if (positionManager.isSectionExpanded(section + 1)) {
+                positionManager.expandSection(section);
+            } else {
+                positionManager.collapseSection(section);
+            }
+        }
+
         notifyItemRangeRemoved(startPosition - 1, sectionItemCount + 1);
+
     }
 
     /**
-     * Notifes the adapter when a section is inserted
+     * Notifies the adapter when a section is inserted
      *
      * @param section Section to insert
      */
@@ -56,6 +67,16 @@ public abstract class SectionedRecyclerViewAdapter<VH extends SectionedViewHolde
         }
         int startPosition = sectionRange[0];
         int sectionItemCount = sectionRange[1];
+
+        // Adjust expand/collapse mapping
+        for (int i = section; i < getSectionCount() - 1; i++) {
+            if (positionManager.isSectionExpanded(i)) {
+                positionManager.expandSection(i + 1);
+            } else {
+                positionManager.collapseSection(i + 1);
+            }
+        }
+        
         notifyItemRangeInserted(startPosition - 1, sectionItemCount + 1);
     }
 
